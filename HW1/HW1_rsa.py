@@ -23,7 +23,7 @@ def to_base_ten(list_of_nums, pow=27):
         sum = sum*pow + num
     return sum
 
-# Converst a number from decimal to base in list form
+# Converts a number from decimal to base in list form
 def from_base_ten(num, base=27):
     nums = []
     while num > 0:
