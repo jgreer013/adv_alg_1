@@ -58,6 +58,7 @@ def EuclidsMultiplicativeInverse(e,phi):
     g,x,y = ExtendedEuclidGCD(e,phi)
     if (g==1):
         return x % phi
+    return None
 
 def MillerRabinPrimalityTest(n):
     #Output: always a composite when false is returned, probably correct when true is returned
@@ -85,21 +86,13 @@ def MillerRabinPrimalityTest(n):
             return False
     return True
 
-def generateKeys(p,q):
+def generateKeys(p,q,publicKey):
     #Ensure that both values are prime
     if (not MillerRabinPrimalityTest(p) or not MillerRabinPrimalityTest(q)):
         return  None
     n = p * q
 
     phi = (p-1) * (q-1)
-
-    #pick random e to find a number coPrime to phi
-    publicKey = random.randint(1, phi)
-    g = EuclidGCD(publicKey, phi)
-    while g != 1:
-        publicKey = random.randint(1, phi)
-        g = EuclidGCD(publicKey, phi)
-        #print("PickedNewPublicKey",publicKey)
 
     privateKey = EuclidsMultiplicativeInverse(publicKey,phi)
     #print("MultiplicativeInverseIs", privateKey)
@@ -148,6 +141,19 @@ def decrypt_text(ciper,key,n):
     #print("Plaintext", plainText)
     return plainText
 
+#Generate a list of coprimes
+def coprimes(n):
+    l = []
+    for x in range(2, n):
+        if  EuclidGCD(x, phi) == 1 and EuclidsMultiplicativeInverse(x,phi) != None:
+            l.append(x)
+    for x in l:
+        if x == EuclidsMultiplicativeInverse(x,phi):
+            l.remove(x)
+    return l
+
+#Set bounds for min and max
+#demo only so smaller numbers are used
 minPrime = 1
 maxPrime = 1000#00000
 #Get random number p which is prime
@@ -165,7 +171,17 @@ while q < 0:
     if MillerRabinPrimalityTest(temp) == True:
         q = temp
 #print("DebugQ:",q)
-publicKey, privateKey = generateKeys(p, q)
+    #pick random e to find a number coPrime to phi
+phi = (p - 1) * (q - 1)
+print("Options for public key are:", coprimes(phi))
+publicKey = int(input("Enter Public Key: "))
+
+g = EuclidGCD(publicKey, phi)
+while g != 1:
+    publicKey = int(input("Enter Public Key: "))
+    g = EuclidGCD(publicKey, phi)
+    #print("PickedNewPublicKey",publicKey)
+publicKey, privateKey = generateKeys(p, q,publicKey)
 #print("DebugPublic:", publicKey)
 #print("DebugPrivate:", privateKey)
 key,n = publicKey
