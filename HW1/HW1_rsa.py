@@ -131,13 +131,13 @@ def is_prime(num):
 
 def encrpyt_text(input, key,n):
     bearcatiiInput = convert_S_to_B(input)
-    print("BEARCATII",bearcatiiInput)
+    #print("BEARCATII",bearcatiiInput)
     encrpytedText = []
     for x in bearcatiiInput:
         #print("X:",x)
         encrpytedText.append(pow(x%n,key%n)%n)
         #print("ENCRYTED", encrpytedText)
-    #print("ENCRYTED",encrpytedText)
+    #print("ENCRYTED",encrpytedText)z
     return encrpytedText
 
 def decrypt_text(ciper,key,n):
@@ -157,27 +157,27 @@ while p < 0:
     if MillerRabinPrimalityTest(temp) == True:
         p = temp
 
-print("DebugP:",p)
+#print("DebugP:",p)
 #Get random number q which is prime
 q = -1
 while q < 0:
     temp = random.randint(minPrime,maxPrime)
     if MillerRabinPrimalityTest(temp) == True:
         q = temp
-print("DebugQ:",q)
+#print("DebugQ:",q)
 publicKey, privateKey = generateKeys(p, q)
-print("DebugPublic:", publicKey)
-print("DebugPrivate:", privateKey)
+#print("DebugPublic:", publicKey)
+#print("DebugPrivate:", privateKey)
 key,n = publicKey
 message = input("Enter Message: ")
 cipher = encrpyt_text(message,key,n)
 key,n = privateKey
 decryptedInput = decrypt_text(cipher,key,n)
-print("DebugDecrypted:",decryptedInput)
+#print("DebugDecrypted:",decryptedInput)
 
 print("P:",p)
 print("Q:",q)
 print("N:",n)
 print("M:",message)
-print("C:",cipher)
+print("C:",''.join(map(lambda x: str(x), cipher)))
 print("P:", ''.join(convert_B_to_S(decryptedInput)))
